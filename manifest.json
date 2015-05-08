@@ -3,7 +3,7 @@
 
   "name": "Search Blacklister",
   "description": "Blacklist a website so that it is hidden by default in search results",
-  "version": "0.2.0",
+  "version": "0.2.2",
 
   "browser_action": {
     "default_icon": "icon.png",

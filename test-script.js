@@ -1,7 +1,6 @@
 console.log('test script loaded');
 
 var timer = 1;
-var looper;
 var selectors;
 
 function onLoaded() {
@@ -22,15 +21,14 @@ function onLoaded() {
 function checkIfLoaded(cb) {
   if (selectors && selectors.length) {
     console.log('google loaded');
-    if (looper) {
-      window.clearInterval(looper);
-    }
     onLoaded();
   } else {
     timer *= 2;
+    window.setTimeout(checkIfLoaded, timer);
   }
 
   selectors = document.querySelectorAll('li.g');
 }
 
-looper = window.setInterval(checkIfLoaded, timer); 
+window.setTimeout(checkIfLoaded, timer);
+
