@@ -2,8 +2,13 @@
   "manifest_version": 2,
 
   "name": "Search Blacklister",
+
+  "permissions": [
+    "storage"
+  ],
+
   "description": "Blacklist a website so that it is hidden by default in search results",
-  "version": "0.2.3",
+  "version": "0.2.4",
 
   "browser_action": {
     "default_icon": "src/images/icon.png",
