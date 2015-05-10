@@ -3,19 +3,19 @@
 
   "name": "Search Blacklister",
   "description": "Blacklist a website so that it is hidden by default in search results",
-  "version": "0.2.2",
+  "version": "0.2.3",
 
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "src/images/icon.png",
     "default_title": "Chrome Extension Title",
-    "default_popup": "popup.html"
+    "default_popup": "src/html/popup.html"
   },
 
   "content_scripts": [
     {
       "matches": ["https://www.google.com/*"],
-      "css": ["mystyles.css"],
-      "js": ["test-script.js"],
+      "css": ["src/css/mystyles.css"],
+      "js": ["src/scripts/test-script.js"],
       "run_at": "document_idle"
     }
   ]
