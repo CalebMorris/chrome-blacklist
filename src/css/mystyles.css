@@ -1,5 +1,5 @@
-body {
-  width: 150px;
-  height: 300px;
-  margin: 15px;
+.banbutton {
+  float: left;
+  padding-right: 4px;
+  cursor: pointer;
 }
