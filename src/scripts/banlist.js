@@ -1,25 +1,53 @@
-console.log('test script loaded');
-
 var timer = 1;
 var selectors;
+var storage = null;
 
-function onBanClick(url, event) {
-  debugger;
+function loadStorage(cb) {
+  chrome.storage.sync.get(null, function(items) {
+    if (chrome.runtime.lastError) {
+      return cb(new Error(chrome.runtime.lastError));
+    }
+    return cb(null, items);
+  });
 }
 
-function generateBanButton(url) {
+function saveStorage(storage, cb) {
+  chrome.storage.sync.set(storage, function() {
+    if (chrome.runtime.lastError) {
+      return cb(new Error(chrome.runtime.lastError));
+    }
+    return cb();
+  });
+}
+
+function onBanClick(url, searchItem, event) {
+  if (! storage.bans) {
+    storage.bans = [];
+  }
+  searchItem.setAttribute('hidden', 'hidden');
+  storage.bans.push(url);
+  saveStorage(storage, function(err) { if (err) { throw err; } });
+}
+
+function isPathBanned(url, bans) {
+  if (! bans) { return false; }
+  for(var i = 0; i < bans.length; i++) {
+    if (url === bans[i]) { return true; }
+  }
+  return false;
+}
+
+function generateBanButton(url, searchItem) {
   var banner = document.createElement('label');
   banner.appendChild(document.createTextNode('B'));
   banner.setAttribute('class', 'banbutton');
 
-  banner.addEventListener('click', onBanClick.bind(this, url));
+  banner.addEventListener('click', onBanClick.bind(this, url, searchItem));
 
   return banner;
 }
 
 function onLoaded() {
-  console.log('selectors', selectors);
-
   for(var i = 0; i < selectors.length; i++) {
     var item = selectors[i];
     var linkWrapper = item.querySelector('.r');
@@ -28,16 +56,16 @@ function onLoaded() {
     if (! linkInfo) { continue; }
 
     console.log('item', linkInfo.href);
-    if (linkInfo.href === 'http://www.speedtest.net/') {
+    if (isPathBanned(linkInfo.href, storage.bans)) {
       item.setAttribute('hidden', 'hidden'); // Example on how to hide an item
     } else {
-      linkWrapper.insertBefore(generateBanButton(linkInfo.href), linkInfo);
+      linkWrapper.insertBefore(generateBanButton(linkInfo.href, item), linkInfo);
     }
   }
 }
 
 function checkIfLoaded(cb) {
-  if (selectors && selectors.length) {
+  if (selectors && selectors.length && storage !== null) {
     console.log('google loaded');
     onLoaded();
   } else {
@@ -48,5 +76,15 @@ function checkIfLoaded(cb) {
   selectors = document.querySelectorAll('li.g');
 }
 
-window.setTimeout(checkIfLoaded, timer);
+function main() {
+  loadStorage(function(err, items) {
+    if (err) {
+      throw err;
+    }
+    storage = items;
+  });
+  window.setTimeout(checkIfLoaded, timer);
+}
+
+main();
 

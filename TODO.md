@@ -3,5 +3,4 @@
   - Reflect visually instantly
 - Add update on sync change
 
-- Create banlist icon
 - Add ban regex

@@ -8,11 +8,16 @@
   ],
 
   "description": "Blacklist a website so that it is hidden by default in search results",
-  "version": "0.2.6",
+  "version": "0.3.0",
+
+  "icons": {
+    "48": "images/blacklist_48x48.png",
+    "128": "images/blacklist_128x128.png"
+  },
 
   "browser_action": {
-    "default_icon": "src/images/icon.png",
-    "default_title": "Chrome Extension Title",
+    "default_icon": "images/blacklist_48x48.png",
+    "default_title": "Chrome Blacklist",
     "default_popup": "src/html/popup.html"
   },
 
