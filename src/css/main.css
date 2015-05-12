@@ -18,3 +18,12 @@ div > button {
 div > li {
   margin-top : 4px;
 }
+
+table, th, td {
+  width : 100%;
+  border: 1px solid black;
+}
+
+td {
+  text-align : center;
+}
