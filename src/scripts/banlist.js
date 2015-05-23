@@ -15,7 +15,7 @@ function filterUnhiddenItems() {
   var bans = storage.bans || [];
   for(var i = 0; i < hidden.length; i++) {
     var item = hidden[i];
-    if (isPathBanned(item.url, bans)) {
+    if (! isPathBanned(item.url, bans)) {
       item.wrapper.removeAttribute('hidden');
       hidden.splice(i, 1);
     }
@@ -52,7 +52,7 @@ function onStorageChanged(changes, areaName) {
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
     if (key === 'bans') { banChanges = true; }
-    storage[key] = changes[key].newValue;
+    storage[key] = changes[key].newValue || [];
   }
 
   if (banChanges) {
