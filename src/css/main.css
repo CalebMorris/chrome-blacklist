@@ -1,7 +1,7 @@
 body {
-  width: 200px;
+  width: 20em;
   height: 100%;
-  margin: 16px;
+  margin: .8em;
 }
 
 div button {
@@ -10,13 +10,13 @@ div button {
 }
 
 div > button {
-  padding : 4px;
-  margin-top : 8px;
-  margin-bottom : 8px;
+  padding : .2em;
+  margin-top : .4em;
+  margin-bottom : .4em;
 }
 
 div > li {
-  margin-top : 4px;
+  margin-top : .2em;
 }
 
 table, th, td {
@@ -24,6 +24,15 @@ table, th, td {
   border: 1px solid black;
 }
 
-td {
-  text-align : center;
+td > label {
+  max-width : 18em;
+  text-overflow : ellipsis;
+  overflow: hidden;
+}
+
+td > button {
+  text-align : left;
+  width : 1.5em;
+  height : 3ex;
+  margin-right : 1em;
 }

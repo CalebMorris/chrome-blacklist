@@ -30,11 +30,13 @@ function filterNewHiddenItems(initial) {
     var linkInfo = linkWrapper.querySelector('a');
     if (! linkInfo) { continue; }
 
+    if(initial) {
+      linkWrapper.insertBefore(generateBanButton(linkInfo.href, item), linkInfo);
+    }
+
     if (isPathBanned(linkInfo.href, storage.bans)) {
       item.setAttribute('hidden', 'hidden'); // Example on how to hide an item
       hidden.push({ wrapper : item, url : linkInfo.href });
-    } else if(initial) {
-      linkWrapper.insertBefore(generateBanButton(linkInfo.href, item), linkInfo);
     }
   }
 }
