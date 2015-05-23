@@ -1,11 +1,17 @@
 var clearButton = document.getElementById('clear-button');
 var banlistWrapper = document.getElementById('banlist-wrapper');
 var loadingMessage = document.getElementById('loading-message');
+var emptyBanlistMessage = document.createTextNode('You have no bans');
+var hasSetUp = false;
 var storage = null;
 
 function onClearBanlist(cb) {
   chrome.storage.sync.clear(function() {
-    console.log('cleared');
+    storage.bans = [];
+    while(banlistWrapper.firstChild) {
+      banlistWrapper.removeChild(banlistWrapper.firstChild);
+    }
+    banlistWrapper.appendChild(emptyBanlistMessage);
   });
 }
 
@@ -41,11 +47,16 @@ loadStorage(function(err, items) {
     throw err;
   }
   storage = items;
-  banlistWrapper.removeChild(loadingMessage);
+
+  if (! hasSetUp) {
+    banlistWrapper.removeChild(loadingMessage);
+    hasSetUp = true;
+  }
+
   if (storage.bans && storage.bans.length > 0) {
     generateBanlistTable(storage.bans);
   } else {
-    banlistWrapper.appendChild(document.createTextNode('You have no bans'));
+    banlistWrapper.appendChild(emptyBanlistMessage);
   }
 });
 
