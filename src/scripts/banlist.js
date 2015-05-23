@@ -27,7 +27,7 @@ function filterNewHiddenItems(initial) {
     var item = selectors[i];
     var linkWrapper = item.querySelector('.r');
     if (! linkWrapper) { continue; }
-    var linkInfo = linkWrapper.firstChild;
+    var linkInfo = linkWrapper.querySelector('a');
     if (! linkInfo) { continue; }
 
     if (isPathBanned(linkInfo.href, storage.bans)) {
