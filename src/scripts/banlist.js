@@ -2,6 +2,7 @@ var timer = 1;
 var selectors;
 var storage = null;
 var hidden = []; // { wrapper : , url : }
+var oldHead = null;
 
 function isPathBanned(url, bans) {
   if (! bans) { return false; }
@@ -106,7 +107,10 @@ function generateBanButton(url, searchItem) {
 }
 
 function checkIfLoaded(cb) {
-  if (selectors && selectors.length && storage !== null) {
+  if (
+    selectors && selectors.length && storage !== null &&
+    selectors[0] !== oldHead
+  ) {
     filterNewHiddenItems(true);
   } else {
     timer *= 2;
@@ -118,6 +122,13 @@ function checkIfLoaded(cb) {
 
 function main() {
   chrome.storage.onChanged.addListener(onStorageChanged);
+  window.addEventListener('hashchange', function() {
+    // Clear page-specific vars and wait for page change to complete
+    oldHead = selectors && selectors[0];
+    selectors = null;
+    timer = 1;
+    window.setTimeout(checkIfLoaded, timer);
+  });
   loadStorage(function(err, items) {
     if (err) {
       throw err;
