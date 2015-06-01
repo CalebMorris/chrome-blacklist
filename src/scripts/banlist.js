@@ -1,4 +1,5 @@
 var timer = 1;
+var loading = false;
 var selectors;
 var storage = null;
 var hidden = []; // { wrapper : , url : }
@@ -107,6 +108,11 @@ function generateBanButton(url, searchItem) {
 }
 
 function checkIfLoaded(cb) {
+  if (loading) {
+    return;
+  } else {
+    loading = true;
+  }
   if (
     selectors && selectors.length && storage !== null &&
     selectors[0] !== oldHead
@@ -118,11 +124,12 @@ function checkIfLoaded(cb) {
   }
 
   selectors = document.querySelectorAll('li.g');
+  loading = false;
 }
 
 function main() {
   chrome.storage.onChanged.addListener(onStorageChanged);
-  window.addEventListener('hashchange', function() {
+  window.addEventListener('hashchange', function(old, n) {
     // Clear page-specific vars and wait for page change to complete
     oldHead = selectors && selectors[0];
     selectors = null;
