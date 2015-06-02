@@ -1,5 +1,5 @@
 var timer = 1;
-var loading = false;
+var lock = null;
 var selectors;
 var storage = null;
 var hidden = []; // { wrapper : , url : }
@@ -107,34 +107,33 @@ function generateBanButton(url, searchItem) {
   return banner;
 }
 
-function checkIfLoaded(cb) {
-  if (loading) {
+function checkIfLoaded(key, cb) {
+  if (lock !== null && lock !== key) {
     return;
-  } else {
-    loading = true;
   }
   if (
     selectors && selectors.length && storage !== null &&
     selectors[0] !== oldHead
   ) {
+    lock = null;
     filterNewHiddenItems(true);
   } else {
     timer *= 2;
-    window.setTimeout(checkIfLoaded, timer);
+    window.setTimeout(checkIfLoaded.bind(null, key), timer);
   }
 
   selectors = document.querySelectorAll('li.g');
-  loading = false;
 }
 
 function main() {
+  lock = 1;
   chrome.storage.onChanged.addListener(onStorageChanged);
   window.addEventListener('hashchange', function(old, n) {
     // Clear page-specific vars and wait for page change to complete
     oldHead = selectors && selectors[0];
     selectors = null;
     timer = 1;
-    window.setTimeout(checkIfLoaded, timer);
+    window.setTimeout(checkIfLoaded.bind(null, 2), timer);
   });
   loadStorage(function(err, items) {
     if (err) {
@@ -142,7 +141,7 @@ function main() {
     }
     storage = items;
   });
-  window.setTimeout(checkIfLoaded, timer);
+  window.setTimeout(checkIfLoaded.bind(null, 1), timer);
 }
 
 main();

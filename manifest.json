@@ -8,7 +8,7 @@
   ],
 
   "description": "Blacklist a website so that it is hidden by default in search results",
-  "version": "0.6.5",
+  "version": "0.6.6",
 
   "web_accessible_resources" : [
     "images/*.png"
